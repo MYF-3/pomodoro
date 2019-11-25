@@ -57,9 +57,11 @@ export class App extends React.Component {
   }
 
   startTimefn() {
+    this.resetTimefn();
     this.setState({
       toggle: true
     });
+    
   }
 
   resetTimefn() {
@@ -81,14 +83,14 @@ export class App extends React.Component {
         }
       }
     }, 1000);
-
   }
 
   shouldComponentUpdate() {
     if (this.state.toggle === false) {
       console.log("stop");
+      clearInterval(this.myInterval);
     }
-    return this.state.toggle === true;
+    return this.resetTimefn;
   }
 
   render() {
