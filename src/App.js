@@ -11,52 +11,107 @@ export class App extends React.Component {
     this.state = {
       minutes: 25,
       seconds: 0,
-      button: ""
+      toggle: true,
+      id: 0
     };
 
     this.alterInitialTime = this.alterInitialTime.bind(this);
+    this.stopTimefn = this.stopTimefn.bind(this);
+    this.startTimefn = this.startTimefn.bind(this);
+    this.resetTimefn = this.resetTimefn.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.myInterval = setInterval(() => {
-  //     const { seconds, minutes } = this.state;
-  //     if (seconds > 0) {
-  //       this.setState(({ seconds }) => ({
-  //         seconds: seconds - 1
-  //       }));
-  //     }
-  //     if (seconds === 0) {
-  //       if (minutes === 0) {
-  //         clearInterval(this.myInterval);
-  //       } else {
-  //         this.setState(({ minutes }) => ({
-  //           minutes: minutes - 1,
-  //           seconds: 59
-  //         }));
-  //       }
-  //     }
-  //   }, 1000);
-  // }
+  componentDidMount() {
+    this.myInterval = setInterval(() => {
+      const { seconds, minutes } = this.state;
+      if (seconds > 0) {
+        this.setState(({ seconds }) => ({
+          seconds: seconds - 1
+        }));
+      }
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(this.myInterval);
+        } else {
+          this.setState(({ minutes }) => ({
+            minutes: minutes - 1,
+            seconds: 59
+          }));
+        }
+      }
+    }, 1000);
+  }
 
-  alterInitialTime() {
+  alterInitialTime(i) {
+    console.log("THIS", this.props);
+    console.log("TARGET", i.target);
     this.setState({
-      minutes: this.props.minutes
+      minutes: i.target.id
     });
+  }
+
+  stopTimefn() {
+    this.setState({
+      toggle: false
+    });
+  }
+
+  startTimefn() {
+    this.setState({
+      toggle: true
+    });
+  }
+
+  resetTimefn() {
+    this.myInterval = setInterval(() => {
+      const { seconds, minutes } = this.state;
+      if (seconds > 0) {
+        this.setState(({ seconds }) => ({
+          seconds: seconds - 1
+        }));
+      }
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(this.myInterval);
+        } else {
+          this.setState(({ minutes }) => ({
+            minutes: minutes - 1,
+            seconds: 59
+          }));
+        }
+      }
+    }, 1000);
+
+  }
+
+  shouldComponentUpdate() {
+    if (this.state.toggle === false) {
+      console.log("stop");
+    }
+    return this.state.toggle === true;
   }
 
   render() {
     return (
       <div>
-        <Timer
-          minutes={this.state.minutes}
+        <Timer minutes={this.state.minutes} seconds={this.state.seconds} />
+        <TimerSetButton
+          minutes={25}
           seconds={0}
           alterTime={this.alterInitialTime}
+          id={25}
         />
-        <TimerSetButton minutes={25} seconds={0} />
-        <TimerSetButton minutes={5} seconds={0} />
-        <TimerUpdateButton button={"start"} />
-        <TimerUpdateButton button={"stop"} />
-        <TimerUpdateButton button={"reset"} />
+        <TimerSetButton
+          minutes={5}
+          seconds={0}
+          alterTime={this.alterInitialTime}
+          id={5}
+        />
+        <TimerUpdateButton
+          startTime={this.startTimefn}
+          stopTime={this.stopTimefn}
+          resetTime={this.resetTimefn}
+        />
       </div>
     );
   }

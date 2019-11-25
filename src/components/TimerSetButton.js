@@ -4,7 +4,7 @@ export class TimerSetButton extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.props.alterTime}>
+        <button id={this.props.id} onClick={this.props.alterTime}>
           {`${this.props.minutes} minutes`}
         </button>
       </div>
