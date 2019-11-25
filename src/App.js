@@ -13,6 +13,8 @@ export class App extends React.Component {
       seconds: 0,
       button: ""
     };
+
+    this.alterInitialTime = this.alterInitialTime.bind(this);
   }
 
   // componentDidMount() {
@@ -36,10 +38,20 @@ export class App extends React.Component {
   //   }, 1000);
   // }
 
+  alterInitialTime() {
+    this.setState({
+      minutes: this.props.minutes
+    });
+  }
+
   render() {
     return (
       <div>
-        <Timer minutes={this.state.minutes} seconds={0} />
+        <Timer
+          minutes={this.state.minutes}
+          seconds={0}
+          alterTime={this.alterInitialTime}
+        />
         <TimerSetButton minutes={25} seconds={0} />
         <TimerSetButton minutes={5} seconds={0} />
         <TimerUpdateButton button={"start"} />
